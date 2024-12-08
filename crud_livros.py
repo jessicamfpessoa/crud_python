@@ -87,11 +87,27 @@ class CrudLivros:
 
 
     def update(self, livro):
-        pass
+        query = f'''
+                    UPDATE public.livro
+                    SET nome_livro = '{livro.nome}',
+                        autor = '{livro.autor}',
+                        num_paginas = {livro.paginas},
+                        ano_lancamento = {livro.lancamento},
+                        editora = '{livro.editora}' 
+                    WHERE id_livro = {livro.id_livro}   
+        '''
+        cur = self.conn.cursor()
+        cur.execute(query)
+        self.conn.commit()
 
-    def delete(self, livro):
-        pass
-
+    def delete(self, id_livro):
+        query = f'''
+                DELETE FROM public.livro
+                    WHERE id_livro = {id_livro}
+        '''
+        cur = self.conn.cursor()
+        cur.execute(query)
+        self.conn.commit()
 
 crud = CrudLivros(
     dbname='postgres',
@@ -112,12 +128,13 @@ sda = Livros(
 
 hp = Livros(
     id_livro = 2,
-    nome_livro = "Harry POtter - A Pedra Filosofal ",
+    nome_livro = "Harry Potter - Cálice de Fogo",
     autor = "J.K. Rolling",
-    num_paginas = 350,
-    ano_lancamento = 1997,
+    num_paginas = 450,
+    ano_lancamento = 2000,
     editora = "Intríseca"
 )
 # crud.insert(hp)
-
-crud.read_by_id(2)
+# crud.read_by_id(2)
+# crud.update(hp)
+crud.delete(2)
